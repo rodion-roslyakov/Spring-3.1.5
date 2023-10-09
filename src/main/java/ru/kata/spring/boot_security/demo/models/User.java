@@ -5,14 +5,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.*;
 
-/**
- * //UserDetails нужен д/того, чтобы преобразовать юзера из БД к определенному стандарту, чтобы его понял Спринг Секьюрити.
- * //Т.е. UserDetails - это такая обертка д/Entity-класса.
- * //UserDetails заведует самым основным: полномочиями - getAuthorities(), паролем - getPassword() и
- * // именем юзера - getUsername()
- **/
+
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {

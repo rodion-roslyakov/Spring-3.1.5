@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.kata.spring.boot_security.demo.models.User;
@@ -12,13 +13,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-@Repository
+@Service
 @Transactional(readOnly = true)
 public class UserServiceImp implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Autowired
     public UserServiceImp(PasswordEncoder passwordEncoder, UserRepository userRepository) {
@@ -30,24 +29,24 @@ public class UserServiceImp implements UserService {
     @Transactional
     public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        entityManager.persist(user);
+        userRepository.save(user);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     @Transactional
     public List<User> index() {
-        return entityManager.createQuery("FROM User").getResultList();
+        return userRepository.findAll();
     }
 
     @Override
     @Transactional
     public void delete(int id) {
-        entityManager.createQuery("DELETE FROM User WHERE id=?1").setParameter(1, id).executeUpdate();
+        userRepository.deleteById(id);
     }
 
     public User show(int id) {
-        return entityManager.find(User.class, id);
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -59,10 +58,9 @@ public class UserServiceImp implements UserService {
     @Transactional
     public void update(int id, User user) {
         User updateUser = show(id);
-        entityManager.merge(updateUser).setRoles(user.getRoles());
-        entityManager.merge(updateUser).setUsername(user.getUsername());
-        entityManager.merge(updateUser).setPassword(passwordEncoder.encode(user.getPassword()));
+        updateUser.setRoles(user.getRoles());
+        updateUser.setUsername(user.getUsername());
+        updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(updateUser);
     }
-
-
 }

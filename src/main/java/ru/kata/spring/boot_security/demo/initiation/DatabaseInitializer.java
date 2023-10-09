@@ -13,8 +13,6 @@ import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import java.util.Arrays;
 import java.util.List;
 
-//ApplicationListener - интерфейс, который позволяет обрабатывать ApplicationEvent события
-//ContextRefreshedEvent - публикуется автоматически после поднятия контекста
 @Component
 public class DatabaseInitializer implements ApplicationListener<ContextRefreshedEvent> {
 

@@ -7,19 +7,20 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import ru.kata.spring.boot_security.demo.services.UserService;
+import ru.kata.spring.boot_security.demo.util.PersonValidator;
 
 import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-
+    private final PersonValidator personValidator;
     private final UserService userService;
 
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(PersonValidator personValidator, UserService userService) {
+        this.personValidator = personValidator;
         this.userService = userService;
     }
 
@@ -33,7 +34,7 @@ public class AdminController {
     public String show(@PathVariable("id") int id, Model model) {
         User user = userService.show(id);
         model.addAttribute("user", user);
-        model.addAttribute("userRoles",user.getRoles());
+        model.addAttribute("userRoles", user.getRoles());
         return "user";
     }
 
@@ -45,9 +46,10 @@ public class AdminController {
 
     @PostMapping()
     public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ("new");
-        }
+        personValidator.validate(user,bindingResult);
+         if(bindingResult.hasErrors()){
+             return "new";
+         }
         userService.save(user);
         return "redirect:/admin";
     }
@@ -56,7 +58,7 @@ public class AdminController {
     public String edit(@PathVariable("id") int id, Model model) {
         User user = userService.show(id);
         model.addAttribute("user", user);
-        model.addAttribute("userRoles",user.getRoles());
+        model.addAttribute("userRoles", user.getRoles());
         return "edit";
     }
 

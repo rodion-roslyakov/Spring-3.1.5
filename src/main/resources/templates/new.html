@@ -16,6 +16,7 @@
 
         <label for="username"> Введите имя: </label>
         <input type="text" th:field="*{username}" id="username"/>
+        <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}" >UsernameError</div>
         <br/>
 
         <label for="password"> Введите пароль: </label>
