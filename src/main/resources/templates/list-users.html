@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns: sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Список пользователей</title>
+</head>
+<body>
+
+<h3>Пользователи</h3>
+<table>
+
+    <tbody>
+        <div th:each="user : ${users}">
+            <a th:href="@{/admin/{id} (id=${user.getId()})}" th:text="${user.getUsername()}">USER</a>
+        </div>
+
+    <td>
+        <form th:method="GET" th:action="@{/admin/new}">
+            <input type="submit" value="Создать нового пользователя"/>
+        </form>
+    </td>
+
+
+    <td>
+        <form th:method="GET" th:action="@{/logout}">
+            <input type="submit" value="Выйти из системы"/>
+        </form>
+    </td>
+
+    </tbody>
+</table>
+
+
+</body>
+</html>

@@ -30,19 +30,5 @@
         </div>
     </div>
 </form>
-<br/>
-<form th:action="@{/admin/{id}/edit (id=${user.getId()})}">
-    <input type="submit" value="Редактировать"/>
-</form>
-<br/>
-<form th:method="DELETE" th:action="@{/admin/{id} (id=${user.id})}">
-    <input type="hidden" name="_method" value="DELETE"/>
-    <input type="submit" value="Удалить"/>
-</form>
-<br/>
-<form th:method="POST" th:action="@{/logout}">
-    <input type="submit" value="Выйти из системы"/>
-</form>
-
 </body>
 </html>
