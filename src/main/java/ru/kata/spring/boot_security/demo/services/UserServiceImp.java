@@ -1,6 +1,8 @@
 package ru.kata.spring.boot_security.demo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.xml.registry.infomodel.Organization;
 import java.util.List;
 
 @Service
@@ -55,4 +58,5 @@ public class UserServiceImp implements UserService {
         showUser(id).setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(showUser(id));
     }
+
 }
