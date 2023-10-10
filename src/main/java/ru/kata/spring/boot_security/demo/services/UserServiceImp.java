@@ -34,33 +34,25 @@ public class UserServiceImp implements UserService {
 
     @Override
     @SuppressWarnings("unchecked")
-    @Transactional
-    public List<User> index() {
+    public List<User> listUsers() {
         return userRepository.findAll();
     }
 
     @Override
     @Transactional
-    public void delete(int id) {
+    public void delete(long id) {
         userRepository.deleteById(id);
     }
 
-    public User show(int id) {
+    public User showUser(long id) {
         return userRepository.findById(id).orElse(null);
     }
-
-    @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
-
     @Override
     @Transactional
-    public void update(int id, User user) {
-        User updateUser = show(id);
-        updateUser.setRoles(user.getRoles());
-        updateUser.setUsername(user.getUsername());
-        updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(updateUser);
+    public void update(long id, User user) {
+        showUser(id).setRoles(user.getRoles());
+        showUser(id).setUsername(user.getUsername());
+        showUser(id).setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(showUser(id));
     }
 }

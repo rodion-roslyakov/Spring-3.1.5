@@ -17,9 +17,9 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
-    @Column(name = "username") //Имя юзера должно быть уникальным
+    @Column(unique = true, name = "username") //Имя юзера должно быть уникальным
     private String username;
 
     @Column(name = "password")
@@ -40,7 +40,7 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -103,6 +103,21 @@ public class User implements UserDetails {
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
                 '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return (31 * (username.hashCode() + password.hashCode() + (int) id));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return this.id == user.id &&
+                Objects.equals(this.password, user.password) &&
+                Objects.equals(this.username, user.username);
     }
 }
 

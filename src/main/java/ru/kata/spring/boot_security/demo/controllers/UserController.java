@@ -21,7 +21,7 @@ public class UserController {
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    @GetMapping()
+    @GetMapping
     public String showUserAccount(Model model, Principal principal) {
         User user = userRepository.findByUsername(principal.getName()).get();
         model.addAttribute("user", user);
