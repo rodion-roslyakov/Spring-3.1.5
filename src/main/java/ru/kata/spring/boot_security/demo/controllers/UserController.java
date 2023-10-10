@@ -23,7 +23,7 @@ public class UserController {
     }
     @GetMapping
     public String showUserAccount(Model model, Principal principal) {
-        User user = userRepository.findByUsername(principal.getName()).get();
+        User user = userRepository.findByUsername(principal.getName()).orElse(new User());
         model.addAttribute("user", user);
         model.addAttribute("userRoles", user.getAuthorities());
         return "user-profile";
