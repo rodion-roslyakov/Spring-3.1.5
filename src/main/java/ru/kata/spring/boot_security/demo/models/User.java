@@ -6,8 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.*;
 
 
@@ -18,12 +17,22 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
+    @Email(message = "Проверьте, что это адрес электронной почты!")
     @Column(unique = true, name = "username") //Имя юзера должно быть уникальным
     private String username;
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "second_name")
+    private String secondName;
+    @Min(value = 0, message = "Проверьте введенный возраст!")
+    @Max(value = 100, message = "Проверьте введенный возраст!")
+    @Column(name = "age")
+    private int age;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
@@ -34,10 +43,21 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String password, List<Role> roles) {
+    public User(String username, String password, String firstName, String secondName, int age, List<Role> roles) {
         this.username = username;
         this.password = password;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.age = age;
         this.roles = roles;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public long getId() {
@@ -58,6 +78,22 @@ public class User implements UserDetails {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
     }
 
     @Override

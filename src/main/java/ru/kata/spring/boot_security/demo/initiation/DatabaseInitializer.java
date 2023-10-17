@@ -26,28 +26,35 @@ public class DatabaseInitializer implements ApplicationListener<ContextRefreshed
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        //Создали роль юзер
-        Role userRole = new Role();
-        userRole.setRole("ROLE_USER");
-        roleService.save(userRole);
 
         //Создали роль админ
         Role adminRole = new Role();
         adminRole.setRole("ROLE_ADMIN");
         roleService.save(adminRole);
 
+        //Создали роль юзер
+        Role userRole = new Role();
+        userRole.setRole("ROLE_USER");
+        roleService.save(userRole);
+
         List<Role> userRoles = List.of(userRole);
         List<Role> adminRoles = Arrays.asList(adminRole, userRole);
 
         User admin = new User();
-        admin.setUsername("admin");
+        admin.setUsername("admin@mail.ru");
         admin.setPassword("admin");
+        admin.setFirstName("Rodion");
+        admin.setSecondName("Roslyakov");
+        admin.setAge(21);
         admin.setRoles(adminRoles);
         userService.save(admin);
 
         User user = new User();
-        user.setUsername("user");
+        user.setUsername("user@mail.ru");
         user.setPassword("user");
+        user.setFirstName("Andrew");
+        user.setSecondName("Malyshew");
+        user.setAge(22);
         user.setRoles(userRoles);
         userService.save(user);
     }

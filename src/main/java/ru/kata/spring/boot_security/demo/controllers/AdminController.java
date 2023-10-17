@@ -6,14 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.util.PersonValidator;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin")
@@ -30,17 +29,24 @@ public class AdminController {
     }
 
     @GetMapping
-    public String listUsers(Model model) {
+    public String listUsers(Model model, Principal principal) {
+
         model.addAttribute("users", userService.listUsers());
+        try {
+            model.addAttribute("user", userService.findByUsername(principal.getName()).get());
+        } catch (Exception e) {
+            return "redirect:/login?error2";
+        }
+        model.addAttribute("allRoles", roleService.findAll());
         return "list-users";
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    public String show(@PathVariable("id") long id, Model model) {
         User user = userService.showUser(id);
         model.addAttribute("user", user);
         model.addAttribute("userRoles", user.getRoles());
-        return "user";
+        return "user-profile";
     }
 
     @GetMapping("/new")
@@ -52,37 +58,38 @@ public class AdminController {
 
     @PostMapping
     public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
-        model.addAttribute("allRoles", roleService.findAll());
         personValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "new";
+            model.addAttribute("allRoles", roleService.findAll());
+            return "list-users";
         }
         userService.save(user);
         return "redirect:/admin";
     }
 
     @GetMapping("{id}/edit")
-    public String edit(@PathVariable("id") int id, Model model) {
+    public String edit(@PathVariable("id") long id, Model model) {
         User user = userService.showUser(id);
         model.addAttribute("user", user);
-        model.addAttribute("userRoles", user.getRoles());
+        model.addAttribute("id", id);
         model.addAttribute("allRoles", roleService.findAll());
         return "edit";
     }
 
     @PatchMapping("/{id}")
-    public String update(@PathVariable("id") int id, @ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
-        model.addAttribute("allRoles", roleService.findAll());
+    public String update(@PathVariable("id") long id, @ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model, Principal principal) {
         personValidator.validate(user, bindingResult);
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors() && !user.getUsername().equals(userService.showUser(id).getUsername())) {
+            model.addAttribute("allRoles", roleService.findAll());
             return "edit";
         }
+
         userService.update(id, user);
         return "redirect:/admin";
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") long id) {
         userService.delete(id);
         return "redirect:/admin";
     }

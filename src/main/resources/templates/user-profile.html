@@ -1,34 +1,116 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
 <head>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <title>Страница пользователя(для Admin)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <link rel="icon" href="https://img.freepik.com/free-icon/leaf_318-654663.jpg">
+    <title>User page</title>
+
+    <style>
+        td.username {
+            padding-left: 20px;
+            font-weight: 900;
+        }
+
+        div.right {
+            padding-right: 20px;
+        }
+
+    </style>
+
+
 </head>
 <body>
 
-<form method="POST" th:action="@{/logout}" th:object="${user}">
-
-    <div class="main block">
-
-        <h3>Страница пользователя</h3>
-
-        <div class="field">
-            <label for="username">Имя</label>
-            <input type="text" th:field="*{username}" id="username"/>
+<nav class="navbar fixed-top navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">
+        <div class="fw-weight-bolder">
+            <table class="text">
+                <tr>
+                    <td class="username" sec:authentication="name"></td>
+                    <td>with roles:</td>
+                    <td th:each="role: ${user.getRoles()}" th:text="${role.getRole().replace('ROLE_','')}"></td>
+                </tr>
+            </table>
         </div>
+    </a>
+    <div class="right">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
-        <div>
-            <label>Роли:
-                <input type="checkbox" name="roles"
-                       th:each="role: ${userRoles}"
-                       th:text="${role.getRole()}"
-                       th:value="${role.getId()}"
-                       th:field="*{roles}"/>
-            </label>
+
+</br></br></br>
+
+
+<div class="row">
+    <div class="col-2">
+        <div class="d-flex align-items-start">
+
+            <div class="nav flex-column nav-pills me-3 col-12" id="v-pills-tab" role="tablist"
+                 aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" href="#v-pills-profile"
+                   role="tab"
+                   aria-controls="v-pills-home" aria-selected="true">User</a>
+            </div>
         </div>
     </div>
-</form>
+
+
+    <div class="col-8">
+
+        <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel"
+             aria-labelledby="v-pills-profile-tab">
+            <p class="fw-bold fs-2">User information-page</p>
+            <p style="padding-left: 10px; padding-top: 10px" class="fw-bold fs-5">About user</p>
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Role</th>
+                </tr>
+                </thead>
+                <tbody>
+                <td th:text="${user.id}"/>
+                <td th:text="${user.firstName}" disabled/>
+                <td th:text="${user.secondName}" disabled/>
+                <td th:text="${user.age}" disabled/>
+                <td th:text="${user.username}" disabled/>
+                <td>
+                                <span th:each="role : ${user.getRoles()}"
+                                      th:text="${role.getRole().replace('ROLE_', '') + ' '}" disabled>
+                                </span>
+                </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
 </body>
 </html>
