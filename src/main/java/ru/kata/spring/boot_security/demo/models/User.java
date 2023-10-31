@@ -1,14 +1,11 @@
 package ru.kata.spring.boot_security.demo.models;
 
-
-import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.*;
-
 
 @Entity
 @Table(name = "users")
@@ -17,10 +14,12 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @NotEmpty(message = "Почта должна быть введена")
     @Email(message = "Проверьте, что это адрес электронной почты!")
     @Column(unique = true, name = "username") //Имя юзера должно быть уникальным
     private String username;
-
+    @NotEmpty(message = "Пароль должен быть введен")
     @Column(name = "password")
     private String password;
 
@@ -34,6 +33,7 @@ public class User implements UserDetails {
     @Column(name = "age")
     private int age;
 
+    @NotEmpty(message = "Роль должна быть выбрана!")
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -131,15 +131,6 @@ public class User implements UserDetails {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", roles=" + roles +
-                '}';
-    }
 
     @Override
     public int hashCode() {

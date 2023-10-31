@@ -17,19 +17,8 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(unique = true, name = "role")
+    @Column(name = "role")
     private String role;
-
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private List<User> users = new ArrayList<>();
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
 
     public Role() {
     }
@@ -57,10 +46,7 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", name='" + role + '\'' +
-                '}';
+        return role.replace("ROLE_", "");
     }
 
     @Override

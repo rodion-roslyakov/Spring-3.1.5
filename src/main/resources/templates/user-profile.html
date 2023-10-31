@@ -13,11 +13,9 @@
     <title>User page</title>
 
     <style>
-        td.username {
+        div.fw-weight-bolder{
             padding-left: 20px;
-            font-weight: 900;
         }
-
         div.right {
             padding-right: 20px;
         }
@@ -31,13 +29,9 @@
 <nav class="navbar fixed-top navbar-dark bg-dark">
     <a class="navbar-brand" href="#">
         <div class="fw-weight-bolder">
-            <table class="text">
-                <tr>
-                    <td class="username" sec:authentication="name"></td>
-                    <td>with roles:</td>
-                    <td th:each="role: ${user.getRoles()}" th:text="${role.getRole().replace('ROLE_','')}"></td>
-                </tr>
-            </table>
+           <span class="navbar-brand" id="navbarBrandUser">
+        <!--********** СКРИПТ **********-->
+           </span>
         </div>
     </a>
     <div class="right">
@@ -85,19 +79,8 @@
                     <th scope="col">Role</th>
                 </tr>
                 </thead>
-                <tbody>
-                <td th:text="${user.id}"/>
-                <td th:text="${user.firstName}" disabled/>
-                <td th:text="${user.secondName}" disabled/>
-                <td th:text="${user.age}" disabled/>
-                <td th:text="${user.username}" disabled/>
-                <td>
-                                <span th:each="role : ${user.getRoles()}"
-                                      th:text="${role.getRole().replace('ROLE_', '') + ' '}" disabled>
-                                </span>
-                </td>
+                <tbody id="tableUser">
 
-                </tr>
                 </tbody>
             </table>
         </div>
@@ -111,6 +94,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+<script src="../static/user/current-user.js"></script>
 
 </body>
 </html>
