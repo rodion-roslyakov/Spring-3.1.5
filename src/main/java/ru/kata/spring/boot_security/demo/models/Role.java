@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "roles", uniqueConstraints= @UniqueConstraint(columnNames={"id", "role"}) )
 
 public class Role implements GrantedAuthority {
 
@@ -18,6 +18,7 @@ public class Role implements GrantedAuthority {
     private long id;
 
     @Column(name = "role")
+
     private String role;
 
     public Role() {

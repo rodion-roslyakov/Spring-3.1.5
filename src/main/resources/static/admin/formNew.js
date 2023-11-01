@@ -32,7 +32,7 @@ function createNewUser() {
         }).then(() => {
             formNew.reset();
             getAllUsers();
-            $('#usersTable').click();
+            document.getElementById("usersTable").click();
         });
     });
 }

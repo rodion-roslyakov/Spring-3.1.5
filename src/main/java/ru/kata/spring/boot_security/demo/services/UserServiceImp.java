@@ -50,9 +50,11 @@ public class UserServiceImp implements UserService {
         userRepository.deleteById(id);
     }
 
+    @Override
     public User showUser(long id) {
         return userRepository.findById(id).orElse(null);
     }
+
     @Override
     @Transactional
     public void update(long id, User user) {
@@ -62,7 +64,7 @@ public class UserServiceImp implements UserService {
         updateUser.setFirstName(user.getFirstName());
         updateUser.setSecondName(user.getSecondName());
         updateUser.setAge(user.getAge());
-        if (!updateUser.getPassword().equals(user.getPassword())){
+        if (!updateUser.getPassword().equals(user.getPassword())) {
             updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
@@ -70,7 +72,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Optional<User> findByUsername(String username){
-       return userRepository.findByUsername(username);
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }
